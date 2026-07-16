@@ -1,0 +1,17 @@
+{
+  "name": "@noeta/theme",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Noeta web design system — 'Ink & Signal' tokens, shared chrome, fonts, and the Noeta syntax highlighter, consumed by every noeta.dev property.",
+  "type": "module",
+  "exports": {
+    "./theme.css": "./css/theme.css",
+    "./fonts.css": "./css/fonts.css",
+    "./highlight": "./js/highlight.js"
+  },
+  "dependencies": {
+    "@fontsource-variable/hanken-grotesk": "^5.2.8",
+    "@fontsource-variable/spline-sans-mono": "^5.2.8",
+    "@fontsource/instrument-serif": "^5.2.8"
+  }
+}
