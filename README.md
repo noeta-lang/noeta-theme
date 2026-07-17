@@ -1,18 +1,23 @@
 # @noeta/theme
 
-The Noeta web design system — **"Ink & Signal"** — shared by every noeta.dev property
-(landing, docs, registry, playground): warm near-black ink, paper-cream type, one
-terminal-amber accent. Instrument Serif for display, Hanken Grotesk for body, Spline Sans
-Mono for code (all self-hosted via Fontsource, declared as dependencies here).
+The Noeta web design system — **"Signal"** — shared by every noeta.dev property
+(landing, docs, registry, playground): a cool slate theme built for reading, with two
+accents split by voice — blue for the human/interactive one (brand, links, buttons,
+emphasis) and mint for the machine/terminal one (shell prompts, CLI commands, the code
+caret, syntax keywords). All sans-serif — Inter for prose, JetBrains Mono for machine
+text — with no italics and no grid. Dark by default, with a paper light mode that follows
+the browser preference (`prefers-color-scheme`, no JS). Fonts are self-hosted via
+Fontsource, declared as dependencies here.
 
 ## Contents
 
-- `@noeta/theme/theme.css` — design tokens (`--ink-*`, `--paper-*`, `--signal*`, `--syn-*`,
-  fonts, radii) plus the chrome every site shares: the atmospheric `.field` background,
+- `@noeta/theme/theme.css` — design tokens (`--bg`, `--surface-*`, `--text-*`, `--accent*`,
+  `--accent-2*`, `--danger`/`--warning`, `--syn-*`, fonts, radii) plus a `prefers-color-scheme`
+  light palette and the chrome every site shares: the atmospheric `.field` background,
   `.site-head`/`.site-foot`, `.btn*`, `.card`, `.code-window` + `tok-*` syntax colors,
   `.section`/`.section-head`, and the `.reveal` staggered load motion
   (reduced-motion-aware). Page-specific layout stays in each site.
-- `@noeta/theme/fonts.css` — the three faces via Fontsource `@import`s.
+- `@noeta/theme/fonts.css` — the two faces (Inter, JetBrains Mono) via Fontsource `@import`s.
 - `@noeta/theme/highlight` — `highlightNoeta(code) → html`, the tiny build-time Noeta
   tokenizer that emits `tok-*` spans.
 

@@ -1,54 +1,118 @@
-/* Noeta web — "Ink & Signal", the shared design system for every noeta.dev
- * property (landing, docs, registry, playground).
+/* Noeta web — "Signal", the shared design system for every noeta.dev property
+ * (landing, docs, registry, playground).
  *
- * A warm, near-black editorial dark theme with one sharp accent: terminal-amber
- * phosphor. The duality of the language ("AI-native, human-first") is expressed
- * typographically — a humanist serif (Instrument Serif) carries the human
- * moments, a precise mono (Spline Sans Mono) carries the machine ones, and
- * Hanken Grotesk does the connective prose.
+ * A cool, clean, technical theme built for reading. Two accents split by voice:
+ * blue is the human/interactive one (brand, links, buttons, emphasis); mint is
+ * the machine/terminal one (shell prompts, CLI commands, the code caret, syntax
+ * keywords) — mirroring the language's own "AI-native, human-first". All
+ * sans-serif (Inter for prose, JetBrains Mono for machine text), no italics, no
+ * grid. Dark by default, with a paper light mode that follows the OS/browser
+ * preference (no JS, so it works on the no-script sites too).
  *
  * This file carries the tokens plus the chrome every site shares: the
  * atmospheric background, header/footer, buttons, cards, code windows, and the
  * load-reveal motion. Page-specific layout stays in each site. */
 
 :root {
-  /* Ink — warm near-blacks, never pure #000. */
-  --ink-0: #131110;
-  --ink-1: #191715;
-  --ink-2: #211e1b;
-  --ink-3: #2b2723;
+  /* Slate — cool neutral near-blacks, never pure #000. */
+  --bg: #0b0d10;
+  --surface-1: #111419;
+  --surface-2: #171b21;
+  --surface-3: #1f242c;
 
-  /* Paper — warm creams for text. */
-  --paper-0: #ece7da;
-  --paper-1: #b9b2a1;
-  --paper-2: #837d6f;
+  /* Text — cool near-whites, stepping down to muted. */
+  --text-0: #e8ebef;
+  --text-1: #a3adba;
+  --text-2: #69727e;
 
-  /* Signal — the single accent: amber phosphor. */
-  --signal: #e69f37;
-  --signal-bright: #ffc46b;
-  --signal-dim: rgba(230, 159, 55, 0.14);
+  /* Signal — two accents, split by voice. Blue = human/interactive (brand,
+   * links, buttons, emphasis); mint = machine/terminal (shell prompts, CLI
+   * commands, the code caret, syntax keywords). */
+  --accent: #4f8ff7;
+  --accent-bright: #7aa9ff;
+  --accent-ink: #08152b;
+  --accent-dim: rgba(79, 143, 247, 0.14);
 
-  /* Syntax — an everforest-warm palette that stays in the family. */
-  --syn-keyword: #e69f37;
-  --syn-string: #a9c181;
-  --syn-number: #e6836a;
-  --syn-type: #dbbc7f;
-  --syn-fn: #d3c6aa;
-  --syn-tag: #7fbbb3;
-  --syn-comment: #837d6f;
-  --syn-hole: #ffc46b;
+  --accent-2: #4fe0a8;
+  --accent-2-bright: #7defc0;
+  --accent-2-dim: rgba(79, 224, 168, 0.12);
 
-  --line: rgba(236, 231, 218, 0.1);
-  --line-strong: rgba(236, 231, 218, 0.18);
+  /* Semantic severity — diagnostics, breakpoints, statuses. Not brand accents:
+   * a warm amber warning and a red error are the universal, expected UX. */
+  --danger: #e5766a;
+  --danger-dim: rgba(229, 118, 106, 0.14);
+  --warning: #e0a878;
 
-  --font-display: "Instrument Serif", "Georgia", serif;
-  --font-body: "Hanken Grotesk Variable", "Hanken Grotesk", sans-serif;
-  --font-mono: "Spline Sans Mono Variable", "Spline Sans Mono", monospace;
+  /* Syntax — machine mint for keywords/holes, azure for types, cool greens. */
+  --syn-keyword: #5fe0b0;
+  --syn-string: #8fd6a0;
+  --syn-number: #e0a878;
+  --syn-type: #8fb8f5;
+  --syn-fn: #cdd6e0;
+  --syn-tag: #5fe0b0;
+  --syn-comment: #69727e;
+  --syn-hole: #7defc0;
+
+  --line: rgba(233, 237, 243, 0.08);
+  --line-strong: rgba(233, 237, 243, 0.14);
+
+  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
 
   --max: 72rem;
-  --radius: 10px;
+  --radius: 12px;
 
   color-scheme: dark;
+}
+
+/* --- light mode: same design, paper palette ----------------------------------------
+ * Auto-switches with the OS/browser preference (no JS, so it ports to the
+ * no-script sites too). Tokens carry the whole design, so only values change:
+ * cool off-white surfaces, dark cool text, and deeper accent + syntax variants
+ * that stay legible on white. */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Paper — cool off-whites, layered for subtle elevation. */
+    --bg: #f6f8fb;
+    --surface-1: #ffffff;
+    --surface-2: #eceff5;
+    --surface-3: #e4e8f0;
+
+    /* Text — cool near-blacks, stepping up to muted. */
+    --text-0: #14181f;
+    --text-1: #47515f;
+    --text-2: #6c7686;
+
+    /* Signal — deepened so blue and mint read on white. */
+    --accent: #2767d6;
+    --accent-bright: #1a55c0;
+    --accent-ink: #ffffff;
+    --accent-dim: rgba(39, 103, 214, 0.1);
+
+    --accent-2: #0c8a66;
+    --accent-2-bright: #097053;
+    --accent-2-dim: rgba(12, 138, 102, 0.1);
+
+    --danger: #cf3b2f;
+    --danger-dim: rgba(207, 59, 47, 0.1);
+    --warning: #b5651d;
+
+    /* Syntax — darker, saturated variants for a light editor. */
+    --syn-keyword: #0c8a66;
+    --syn-string: #3f8f4f;
+    --syn-number: #b5651d;
+    --syn-type: #2767d6;
+    --syn-fn: #384657;
+    --syn-tag: #0c8a66;
+    --syn-comment: #8a94a4;
+    --syn-hole: #097053;
+
+    --line: rgba(20, 24, 31, 0.1);
+    --line-strong: rgba(20, 24, 31, 0.16);
+
+    color-scheme: light;
+  }
 }
 
 *,
@@ -63,17 +127,18 @@ html {
 
 body {
   margin: 0;
-  background: var(--ink-0);
-  color: var(--paper-0);
+  background: var(--bg);
+  color: var(--text-0);
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.65;
-  font-weight: 380;
+  font-weight: 400;
+  letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* --- atmosphere: layered field behind everything ----------------------------------- */
+/* --- atmosphere: one calm glow, no grid -------------------------------------------- */
 
 .field {
   position: fixed;
@@ -81,32 +146,34 @@ body {
   z-index: -1;
   pointer-events: none;
   background:
-    /* amber breath, top */
-    radial-gradient(90rem 44rem at 78% -18%, rgba(230, 159, 55, 0.09), transparent 62%),
-    /* cool counterweight, low left */
-    radial-gradient(70rem 40rem at -12% 112%, rgba(127, 187, 179, 0.05), transparent 60%),
-    var(--ink-0);
-}
-
-.field::before {
-  /* fine blueprint grid, faded through a mask so it reads as texture, not chrome */
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(100rem 60rem at 70% -10%, rgba(0, 0, 0, 0.55), transparent 70%);
+    /* blue signal, top-right */
+    radial-gradient(58rem 40rem at 84% -12%, rgba(79, 143, 247, 0.1), transparent 60%),
+    /* mint counterweight, low-left */
+    radial-gradient(52rem 40rem at -6% 108%, rgba(79, 224, 168, 0.055), transparent 58%),
+    var(--bg);
 }
 
 .field::after {
-  /* grain */
+  /* whisper of grain so flat panels don't band */
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: light) {
+  .field {
+    background:
+      radial-gradient(58rem 40rem at 84% -12%, rgba(39, 103, 214, 0.07), transparent 60%),
+      radial-gradient(52rem 40rem at -6% 108%, rgba(12, 138, 102, 0.05), transparent 58%),
+      var(--bg);
+  }
+
+  .field::after {
+    /* dark-noise grain reads as dust on paper — barely there */
+    opacity: 0.012;
+  }
 }
 
 /* --- primitives --------------------------------------------------------------------- */
@@ -127,22 +194,35 @@ p {
 }
 
 ::selection {
-  background: rgba(230, 159, 55, 0.28);
-  color: var(--paper-0);
+  background: rgba(79, 143, 247, 0.3);
+  color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  ::selection {
+    background: rgba(39, 103, 214, 0.18);
+    color: var(--text-0);
+  }
 }
 
 .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--signal);
+  color: var(--accent);
   font-weight: 500;
 }
 
 .eyebrow::before {
-  content: "// ";
-  color: var(--paper-2);
+  content: "";
+  width: 1.4rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
 }
 
 /* --- header -------------------------------------------------------------------------- */
@@ -151,8 +231,8 @@ p {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(14px);
-  background: color-mix(in srgb, var(--ink-0) 72%, transparent);
+  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
   border-bottom: 1px solid var(--line);
 }
 
@@ -168,37 +248,39 @@ p {
     height: auto;
     flex-wrap: wrap;
     gap: 0.1rem 1rem;
-    padding-block: 0.65rem;
+    padding-block: 0.7rem;
   }
 }
 
 .wordmark {
-  font-family: var(--font-display);
-  font-size: 1.55rem;
-  letter-spacing: 0.01em;
-  color: var(--paper-0);
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  color: var(--text-0);
 }
 
 .wordmark .tld {
-  color: var(--paper-2);
-  font-style: italic;
+  color: var(--text-2);
+  font-weight: 500;
 }
 
 .site-nav {
   display: flex;
-  gap: clamp(1rem, 3vw, 2rem);
+  gap: clamp(1rem, 3vw, 1.9rem);
   align-items: center;
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
 }
 
 .site-nav a {
-  color: var(--paper-1);
+  color: var(--text-1);
   transition: color 160ms ease;
 }
 
 .site-nav a:hover {
-  color: var(--signal-bright);
+  color: var(--accent-bright);
 }
 
 /* --- buttons ------------------------------------------------------------------------- */
@@ -206,15 +288,16 @@ p {
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.925rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  padding: 0.72rem 1.35rem;
-  border-radius: 999px;
+  letter-spacing: 0.005em;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
   border: 1px solid var(--line-strong);
-  color: var(--paper-0);
-  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  color: var(--text-0);
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease, color 180ms ease;
 }
 
 .btn:hover {
@@ -222,20 +305,28 @@ p {
 }
 
 .btn-primary {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: #191512;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: var(--signal-bright);
-  border-color: var(--signal-bright);
-  box-shadow: 0 6px 28px rgba(230, 159, 55, 0.28);
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  box-shadow: 0 8px 30px -8px rgba(79, 143, 247, 0.45);
 }
 
 .btn-ghost:hover {
-  border-color: var(--signal);
-  background: var(--signal-dim);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent-bright);
+}
+
+@media (prefers-color-scheme: light) {
+  .btn-primary:hover {
+    box-shadow: 0 8px 24px -10px rgba(39, 103, 214, 0.5);
+  }
 }
 
 /* --- code window ----------------------------------------------------------------------- */
@@ -243,51 +334,59 @@ p {
 .code-window {
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--ink-1) 88%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
   box-shadow:
-    0 1px 0 rgba(236, 231, 218, 0.05) inset,
-    0 24px 70px -30px rgba(0, 0, 0, 0.8);
+    0 1px 0 rgba(233, 237, 243, 0.04) inset,
+    0 30px 80px -40px rgba(0, 0, 0, 0.9);
   overflow: hidden;
+}
+
+@media (prefers-color-scheme: light) {
+  .code-window {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.7) inset,
+      0 18px 50px -30px rgba(20, 24, 31, 0.28);
+  }
 }
 
 .code-window .bar {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.65rem 0.95rem;
+  padding: 0.7rem 1rem;
   border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--ink-2) 80%, transparent);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
 }
 
 .code-window .dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--ink-3);
+  background: var(--surface-3);
   border: 1px solid var(--line-strong);
 }
 
 .code-window .dot.lit {
-  background: var(--signal);
-  border-color: var(--signal);
-  box-shadow: 0 0 10px rgba(230, 159, 55, 0.55);
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  box-shadow: 0 0 10px rgba(79, 224, 168, 0.5);
 }
 
 .code-window .file {
   margin-left: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--paper-1);
+  font-size: 0.8rem;
+  color: var(--text-1);
 }
 
 .code-window pre {
   margin: 0;
-  padding: 1.05rem 1.15rem 1.2rem;
+  padding: 1.1rem 1.2rem 1.25rem;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  line-height: 1.72;
-  color: var(--paper-0);
+  line-height: 1.75;
+  color: var(--text-0);
   tab-size: 4;
 }
 
@@ -299,23 +398,23 @@ p {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.6rem 1.05rem;
+  padding: 0.65rem 1.1rem;
   border-top: 1px solid var(--line);
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--paper-1);
-  background: color-mix(in srgb, var(--ink-2) 60%, transparent);
+  color: var(--text-1);
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
 }
 
 .code-window .foot .prompt {
-  color: var(--signal);
+  color: var(--accent-2);
 }
 
 .code-window .foot .caret {
   display: inline-block;
   width: 7px;
   height: 15px;
-  background: var(--signal);
+  background: var(--accent-2);
   animation: blink 1.15s steps(1) infinite;
 }
 
@@ -333,7 +432,7 @@ p {
 .tok-fn { color: var(--syn-fn); }
 .tok-tag { color: var(--syn-tag); }
 .tok-cmt { color: var(--syn-comment); font-style: italic; }
-.tok-tier { color: var(--signal-bright); }
+.tok-tier { color: var(--accent-2-bright); }
 .tok-hole { color: var(--syn-hole); }
 
 /* --- sections & cards ---------------------------------------------------------------- */
@@ -350,20 +449,21 @@ p {
 
 .section-head h2 {
   margin: 0.9rem 0 0;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2rem, 4.2vw, 3rem);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  font-family: var(--font-body);
+  font-weight: 640;
+  font-size: clamp(1.9rem, 3.8vw, 2.7rem);
+  line-height: 1.1;
+  letter-spacing: -0.028em;
 }
 
 .section-head h2 em {
-  color: var(--signal);
+  font-style: normal;
+  color: var(--accent);
 }
 
 .section-head .sub {
   margin-top: 1rem;
-  color: var(--paper-1);
+  color: var(--text-1);
   max-width: 38rem;
 }
 
@@ -371,43 +471,43 @@ p {
   position: relative;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--ink-1) 75%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
   padding: 1.6rem 1.5rem 1.5rem;
   transition: border-color 200ms ease, transform 200ms ease, background 200ms ease;
 }
 
 .card:hover {
-  border-color: rgba(230, 159, 55, 0.35);
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
   transform: translateY(-2px);
-  background: color-mix(in srgb, var(--ink-1) 92%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
 }
 
 .card .num {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--signal);
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.12em;
 }
 
 .card h3 {
   margin: 0.7rem 0 0.55rem;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.5rem;
-  letter-spacing: 0.005em;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.015em;
 }
 
 .card p {
-  color: var(--paper-1);
-  font-size: 0.975rem;
+  color: var(--text-1);
+  font-size: 0.96rem;
 }
 
 .card code,
 .prose code {
   font-family: var(--font-mono);
-  font-size: 0.86em;
-  color: var(--paper-0);
-  background: var(--ink-3);
+  font-size: 0.84em;
+  color: var(--text-0);
+  background: var(--surface-3);
   border: 1px solid var(--line);
   border-radius: 5px;
   padding: 0.08em 0.38em;
@@ -429,12 +529,15 @@ p {
 }
 
 .site-foot .tagline {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.015em;
 }
 
 .site-foot .tagline em {
-  color: var(--signal);
+  font-style: normal;
+  color: var(--accent);
 }
 
 .foot-nav {
@@ -442,23 +545,23 @@ p {
   flex-wrap: wrap;
   gap: 1.4rem;
   font-family: var(--font-mono);
-  font-size: 0.84rem;
+  font-size: 0.8rem;
 }
 
 .foot-nav a {
-  color: var(--paper-2);
+  color: var(--text-2);
   transition: color 160ms ease;
 }
 
 .foot-nav a:hover {
-  color: var(--signal-bright);
+  color: var(--accent-bright);
 }
 
 .foot-meta {
   width: 100%;
   margin-top: 0.4rem;
   font-size: 0.84rem;
-  color: var(--paper-2);
+  color: var(--text-2);
 }
 
 /* --- motion: staggered load reveal ----------------------------------------------------- */
