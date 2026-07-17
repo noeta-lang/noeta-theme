@@ -7,6 +7,7 @@
   "exports": {
     "./theme.css": "./css/theme.css",
     "./fonts.css": "./css/fonts.css",
+    "./favicon.svg": "./assets/favicon.svg",
     "./highlight": "./js/highlight.js"
   },
   "dependencies": {
