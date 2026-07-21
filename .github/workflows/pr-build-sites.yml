@@ -1,0 +1,131 @@
+name: PR — build dependent sites
+
+# A design-system change lands here, but every consuming site pins the theme as
+# `"@noeta/theme": "file:../noeta-theme"` — so a break (a renamed token, a
+# dropped export, markup the OG-image renderer chokes on) surfaces in THEIR
+# build, not this repo's. This gate makes that break un-missable: on every PR it
+# rebuilds all three sites against the PR's theme and fails if any build fails.
+# A red check here blocks the merge, so a theme change can't quietly break a site.
+#
+# It reproduces each site's REAL build (the Playwright-rendered OG image, docs
+# sync, pagefind, the playground's wasm engine) — not a lighter approximation —
+# because those steps consume theme markup too, so a shortcut would let exactly
+# the breaks we care about through. The only thing dropped is the Cloudflare
+# deploy: this validates, it never publishes, and it needs no secrets.
+#
+# The on-disk layout mirrors the sites' own deploy workflows so their prebuild
+# scripts resolve the theme (and, for playground, the engine) identically:
+#   <workspace>/site/          the consuming site (its default branch)
+#   <workspace>/noeta-theme/   THIS repo at the PR's merge ref  → ../noeta-theme
+#   <workspace>/lang/          the language repo (playground engine source only)
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # One in-flight run per PR; a new push supersedes the last.
+  group: pr-build-sites-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: site
+
+jobs:
+  build:
+    name: ${{ matrix.site.repo }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      # Build every site even after one fails — you want all three verdicts on
+      # the PR, not just the first break.
+      fail-fast: false
+      matrix:
+        site:
+          - { repo: noeta-landing, engine: false }
+          - { repo: noeta-docs, engine: false }
+          - { repo: noeta-playground, engine: true }
+    steps:
+      - name: Checkout @noeta/theme (the PR)
+        # No `repository:` → this repo, at the PR's merge ref: the theme exactly
+        # as it would be post-merge. Sibling of site/ so `file:../noeta-theme` resolves.
+        uses: actions/checkout@v6
+        with:
+          path: noeta-theme
+
+      - name: Checkout site
+        uses: actions/checkout@v6
+        with:
+          repository: noeta-lang/${{ matrix.site.repo }}
+          path: site
+
+      - name: Resolve latest Noeta release tag
+        # The sites bake the released tag into SITE.version and (docs) sync content
+        # from it / (playground) build the engine from it — so build against the
+        # release, matching prod. No release yet → empty → each site falls back to
+        # its default (main). GITHUB_TOKEN only lifts the API rate limit.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG=$(curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/noeta-lang/noeta/releases/latest \
+            | jq -r '.tag_name // empty' || true)
+          if [ -n "$TAG" ]; then
+            echo "NOETA_VERSION=$TAG" >> "$GITHUB_ENV"
+            echo "NOETA_DOCS_REF=$TAG" >> "$GITHUB_ENV"
+            echo "Building against release $TAG."
+          else
+            echo "No release found; building against main."
+          fi
+
+      - name: Checkout the language repo (engine source)
+        if: matrix.site.engine
+        uses: actions/checkout@v6
+        with:
+          repository: noeta-lang/noeta
+          ref: ${{ env.NOETA_VERSION }}
+          path: lang
+
+      - name: Set up Rust (wasm32-unknown-unknown)
+        if: matrix.site.engine
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Cache the engine build
+        if: matrix.site.engine
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: lang
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          package_json_file: site/package.json
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: site/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ hashFiles('site/pnpm-lock.yaml') }}
+
+      - name: Install Chromium
+        # The OG image is rendered from theme-styled markup, so a theme change can
+        # break it — this step is not optional for a faithful gate.
+        run: pnpm exec playwright-core install --with-deps chromium
+
+      - name: Build (no deploy)
+        # The whole gate: if the site can't build against this theme, the check
+        # goes red and the PR is blocked. There is deliberately no deploy step.
+        run: pnpm run build
