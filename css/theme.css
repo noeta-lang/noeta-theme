@@ -265,6 +265,30 @@ p {
   font-weight: 500;
 }
 
+/* The wordmark + version-pill group every site header opens with. The pill shows the released
+ * Noeta tag (NOETA_VERSION at build) and links to its release page; a site simply omits it when
+ * no release is known. */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.version-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+
+.version-pill:hover {
+  color: var(--accent-bright);
+  border-color: var(--accent);
+}
+
 .site-nav {
   display: flex;
   gap: clamp(1rem, 3vw, 1.9rem);
