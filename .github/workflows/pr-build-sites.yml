@@ -1,11 +1,17 @@
 name: PR — build dependent sites
 
-# A design-system change lands here, but every consuming site pins the theme as
+# A design-system change lands here, but every consumer pins the theme as
 # `"@noeta/theme": "file:../noeta-theme"` — so a break (a renamed token, a
 # dropped export, markup the OG-image renderer chokes on) surfaces in THEIR
 # build, not this repo's. This gate makes that break un-missable: on every PR it
-# rebuilds all three sites against the PR's theme and fails if any build fails.
-# A red check here blocks the merge, so a theme change can't quietly break a site.
+# verifies all four consumers against the PR's theme and fails if any of them
+# fails. A red check here blocks the merge, so a theme change can't quietly
+# break a site.
+#
+# Four, not three: the registry consumes the shared header/footer markup now, and
+# it is the most fragile consumer — it pins the drawer script's SHA-256 in its
+# CSP, so a change to that script here breaks a page there in a way only its
+# suite catches.
 #
 # It reproduces each site's REAL build (the Playwright-rendered OG image, docs
 # sync, pagefind, the playground's wasm engine) — not a lighter approximation —
@@ -38,14 +44,18 @@ jobs:
     permissions:
       contents: read
     strategy:
-      # Build every site even after one fails — you want all three verdicts on
-      # the PR, not just the first break.
+      # Verify every consumer even after one fails — you want all four verdicts
+      # on the PR, not just the first break.
       fail-fast: false
       matrix:
         site:
-          - { repo: noeta-landing, engine: false }
-          - { repo: noeta-docs, engine: false }
-          - { repo: noeta-playground, engine: true }
+          # `verify` is each consumer's own definition of "still works": the Astro
+          # sites build, the registry runs its suite — which is what catches a
+          # DRAWER_SCRIPT change here without a matching CSP hash bump there.
+          - { repo: noeta-landing, engine: false, browser: true, verify: build }
+          - { repo: noeta-docs, engine: false, browser: true, verify: build }
+          - { repo: noeta-playground, engine: true, browser: true, verify: build }
+          - { repo: noeta-registry, engine: false, browser: false, verify: test }
     steps:
       - name: Checkout @noeta/theme (the PR)
         # No `repository:` → this repo, at the PR's merge ref: the theme exactly
@@ -115,6 +125,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Cache Playwright browsers
+        if: matrix.site.browser
         uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
@@ -122,10 +133,13 @@ jobs:
 
       - name: Install Chromium
         # The OG image is rendered from theme-styled markup, so a theme change can
-        # break it — this step is not optional for a faithful gate.
+        # break it — this step is not optional for a faithful gate. The registry
+        # renders no images and needs no browser.
+        if: matrix.site.browser
         run: pnpm exec playwright-core install --with-deps chromium
 
-      - name: Build (no deploy)
-        # The whole gate: if the site can't build against this theme, the check
-        # goes red and the PR is blocked. There is deliberately no deploy step.
-        run: pnpm run build
+      - name: Verify (no deploy)
+        # The whole gate: if the consumer can't build (or, for the registry, can't
+        # pass its suite) against this theme, the check goes red and the PR is
+        # blocked. There is deliberately no deploy step.
+        run: pnpm run ${{ matrix.site.verify }}
