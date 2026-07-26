@@ -2,7 +2,13 @@
  * noeta.dev properties. Not a real grammar — an ordered regex alternation good
  * enough for curated samples and doc snippets, emitting <span class="tok-*">
  * for theme.css to color. Plain JS so it imports cleanly from node_modules
- * without a transpile step. */
+ * without a transpile step.
+ *
+ * This file is the CANONICAL copy. A vendored TypeScript port lives in the
+ * registry Worker (noeta-registry/src/highlight.ts — the registry is
+ * dependency-free, so it inlines rather than imports). Keep the rules, keyword
+ * set, and tok-* classes in lockstep; the registry's web.test.ts pins the
+ * exact spans for a known snippet as the drift tripwire. */
 
 const esc = (s) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
