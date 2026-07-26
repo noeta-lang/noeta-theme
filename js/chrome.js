@@ -139,6 +139,9 @@ export const DRAWER_SCRIPT = `(() => {
   document.documentElement.setAttribute("data-chrome-enhanced", "");
 
   const navCopy = nav.cloneNode(true);
+  // Drop .site-nav: the drawer lives inside <header class="site-head">, so the
+  // rule that hides the header nav at this breakpoint would hide the copy too.
+  navCopy.classList.remove("site-nav");
   navCopy.classList.add("drawer-nav");
   navCopy.removeAttribute("aria-label");
   body.appendChild(navCopy);
