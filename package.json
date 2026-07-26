@@ -9,6 +9,7 @@
     "./fonts.css": "./css/fonts.css",
     "./favicon.svg": "./assets/favicon.svg",
     "./highlight": "./js/highlight.js",
+    "./chrome": "./js/chrome.js",
     "./check-overflow": "./scripts/check-overflow.mjs"
   },
   "dependencies": {
