@@ -356,6 +356,10 @@ p {
 /* --- code window ----------------------------------------------------------------------- */
 
 .code-window {
+  /* Reset the UA default for <figure> (margin: 1em 40px). Paired with a
+   * width:100% rule those 40px insets are added to the box rather than taken
+   * out of it, which pushes the window 40px past its container on phones. */
+  margin: 0;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   background: color-mix(in srgb, var(--surface-1) 92%, transparent);
