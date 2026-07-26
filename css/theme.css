@@ -358,7 +358,9 @@ p {
 }
 
 @media (max-width: 38rem) {
-  :root[data-chrome-enhanced] .site-head .site-nav {
+  /* Scoped through .wrap so it cannot reach the copy of the nav that lives in
+   * the drawer — the drawer is a sibling of .wrap inside the same <header>. */
+  :root[data-chrome-enhanced] .site-head .wrap .site-nav {
     display: none;
   }
 
