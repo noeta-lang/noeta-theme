@@ -291,7 +291,11 @@ p {
 
 .site-nav {
   display: flex;
-  gap: clamp(1rem, 3vw, 1.9rem);
+  /* The header .wrap wraps at 38rem, but the nav itself is one flex line: at
+   * 320px its four links need 316px against a 280px content box and hang off
+   * the edge. Let the links wrap too. */
+  flex-wrap: wrap;
+  gap: 0.35rem clamp(1rem, 3vw, 1.9rem);
   align-items: center;
   font-family: var(--font-mono);
   font-size: 0.82rem;
@@ -356,6 +360,10 @@ p {
 /* --- code window ----------------------------------------------------------------------- */
 
 .code-window {
+  /* Reset the UA default for <figure> (margin: 1em 40px). Paired with a
+   * width:100% rule those 40px insets are added to the box rather than taken
+   * out of it, which pushes the window 40px past its container on phones. */
+  margin: 0;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   background: color-mix(in srgb, var(--surface-1) 92%, transparent);
