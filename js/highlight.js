@@ -4,11 +4,9 @@
  * for theme.css to color. Plain JS so it imports cleanly from node_modules
  * without a transpile step.
  *
- * This file is the CANONICAL copy. A vendored TypeScript port lives in the
- * registry Worker (noeta-registry/src/highlight.ts — the registry is
- * dependency-free, so it inlines rather than imports). Keep the rules, keyword
- * set, and tok-* classes in lockstep; the registry's web.test.ts pins the
- * exact spans for a known snippet as the drift tripwire. */
+ * This file is the CANONICAL copy. (The registry Worker's former vendored port
+ * is gone — it now renders through shiki with the canonical TextMate grammar;
+ * see noeta-registry/src/shiki.ts.) */
 
 const esc = (s) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
