@@ -2,7 +2,7 @@
   "name": "@noeta/theme",
   "version": "0.1.0",
   "private": true,
-  "description": "The Noeta web design system \u2014 'Signal' tokens, shared chrome, fonts, and the Noeta syntax highlighter, consumed by every noeta.dev property.",
+  "description": "The Noeta web design system — 'Signal' tokens, shared chrome, fonts, and the Noeta syntax highlighter, consumed by every noeta.dev property.",
   "type": "module",
   "exports": {
     "./theme.css": "./css/theme.css",
@@ -11,7 +11,8 @@
     "./highlight": "./js/highlight.js",
     "./chrome": "./js/chrome.js",
     "./check-overflow": "./scripts/check-overflow.mjs",
-    "./check-chrome": "./scripts/check-chrome.mjs"
+    "./check-chrome": "./scripts/check-chrome.mjs",
+    "./copy": "./js/copy.js"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
