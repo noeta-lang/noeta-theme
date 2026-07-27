@@ -14,13 +14,19 @@
  * load-reveal motion. Page-specific layout stays in each site.
  *
  * Breakpoints. Media queries cannot read custom properties, so these are a
- * convention rather than tokens — but every property uses the same three, so
+ * convention rather than tokens — but every property uses the same set, so
  * the four sites fold at the same places instead of at 38/52/56/60/62rem as
  * they once did:
  *
  *   38rem  --bp-compact   phone. Chrome folds into the drawer.
  *   56rem  --bp-stack     two-column page layouts collapse to one.
  *   62rem  --bp-wide      hero-scale layouts collapse.
+ *   78rem  --bp-rail      a third column fits beside a two-column page.
+ *
+ * 78rem is arithmetic rather than taste: it is where docs' page-contents rail
+ * appears, and a 17rem nav, a 13.5rem rail, two 4rem gutters and the 5rem page
+ * padding leave 34rem of prose there — the narrowest measure still worth
+ * reading. Below it the third column has to live somewhere else.
  *
  * Any new breakpoint needs a reason that is not "this is where my page happened
  * to look wrong". */
@@ -71,10 +77,28 @@
   --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
 
+  /* Page width. Everything inside a .wrap — header, footer, page body — measures
+   * against this, which is what keeps the wordmark, the content and the footer on
+   * one left edge. See the wide opt-in below. */
   --max: 72rem;
   --radius: 12px;
 
   color-scheme: dark;
+}
+
+/* --- wide pages ---------------------------------------------------------------------
+ * Two page widths, not one per site: reading width (the default 72rem, a single
+ * column of prose with at most a nav beside it) and wide (84rem, room for a third
+ * column). A page opts in on <html> — `<html lang="en" data-layout="wide">` — and
+ * because the shared chrome is `.wrap` too, the header and footer widen with it
+ * rather than leaving the body hanging off a narrower frame.
+ *
+ * This is an attribute rather than a per-site `--max` override so the widths stay
+ * a design-system decision with two named values, and so it cannot land in the
+ * wrong cascade order relative to theme.css. Docs uses it for its page-contents
+ * rail (see --bp-rail above); nothing else does yet. */
+:root[data-layout="wide"] {
+  --max: 84rem;
 }
 
 /* --- light mode: same design, paper palette ----------------------------------------

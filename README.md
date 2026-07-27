@@ -41,6 +41,20 @@ import { highlightNoeta } from "@noeta/theme/highlight";
 In CI, clone this repo next to the site checkout before `pnpm install` (see the sites'
 deploy workflows).
 
+## Page width
+
+Two widths, not one per site. The default is reading width (`--max: 72rem`); a page that
+needs a third column opts into the wide one (`84rem`) on the root element:
+
+```html
+<html lang="en" data-layout="wide"></html>
+```
+
+Everything inside a `.wrap` measures against `--max` — including the shared header and
+footer — so the whole page widens together and the wordmark stays on the content's left
+edge. Docs uses this for its page-contents rail; the `78rem` `--bp-rail` breakpoint (see
+the breakpoint table at the top of `theme.css`) is where that third column appears.
+
 After editing the theme, run `pnpm install` in consuming repos to re-copy the `file:`
 dependency (or use `pnpm dev`'s restart).
 
