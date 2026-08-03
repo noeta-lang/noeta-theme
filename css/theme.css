@@ -229,6 +229,20 @@ p {
   margin: 0;
 }
 
+/* Code is typed, so it must render as typed. JetBrains Mono ships its arrow and
+ * comparison ligatures on by default, which fuses `|>` into one glyph nobody has a
+ * key for — the same for `->`, `=>`, `!=`, `>=`, `??`. Every operator we document is
+ * a sequence of ordinary characters; showing a single glyph teaches the wrong thing.
+ * Scoped to code surfaces: Inter's own ligatures still belong in prose. */
+code,
+pre,
+kbd,
+samp,
+.mono {
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0;
+}
+
 ::selection {
   background: rgba(79, 143, 247, 0.3);
   color: #fff;
